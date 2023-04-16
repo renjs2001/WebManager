@@ -30,13 +30,11 @@ func main() {
 	client.Init()
 	db.Init()
 	//pid := createProduct("token_name", "product_name", "description")
-	//lid := createLayer(pid, "layer_name")
-	//fmt.Println(lid)
+	//createLayer(pid, "layer_name")
 	//createTrafficMap()
 	//createFlight()
 	//createVersion()
-	requestVm()
-
+	requestVmTest()
 }
 func createProduct(token, productName, des string) int64 {
 
@@ -167,7 +165,7 @@ func createVersion() {
 	fmt.Printf("some msg,id = %v, success line num = %v\n", version.ID, result.RowsAffected)
 }
 
-func requestVm() {
+func requestVmTest() {
 	prop := map[string]string{}
 	prop["product"] = "demo"
 	prop["uid"] = "123456"
@@ -183,5 +181,19 @@ func requestVm() {
 	if err != nil {
 		panic(err)
 	}
+	prop["devicePlatform"] = "linux"
+	prop["uid"] = "123458"
+	reqbyte2, err := json.Marshal(prop)
+	if err != nil {
+		panic(err)
+	}
+	req2 := meta_rpc.VersionReq{Req: string(reqbyte2)}
+	resp2, err := client.VmClient.GetAbversion(context.Background(), &req2)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("req is %v\n", req)
+	fmt.Printf("req2 is %v\n", req2)
 	fmt.Printf("resp is %v\n", *resp)
+	fmt.Printf("resp2 is %v\n", *resp2)
 }
